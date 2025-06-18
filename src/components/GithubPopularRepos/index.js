@@ -19,14 +19,6 @@ class GithubPopularRepos extends Component {
     popularRepoList: [],
   }
 
-  //   selectedFilterOptions = {
-  //     all: 'ALL',
-  //     javascript: 'JAVASCRIPT',
-  //     ruby: 'RUBY',
-  //     java: 'JAVA',
-  //     css: 'CSS',
-  //   }
-
   apiStatus = {
     success: 'SUCCESS',
     loading: 'LOADING',
@@ -44,6 +36,7 @@ class GithubPopularRepos extends Component {
   getRepositories = async () => {
     const url = this.getUrl()
     const response = await fetch(url)
+    console.log(response.resolved)
     if (response.ok === true) {
       const data = await response.json()
       //   console.log(data)
@@ -70,12 +63,13 @@ class GithubPopularRepos extends Component {
     return `https://apis.ccbp.in/popular-repos?language=${selectedFilter}`
   }
 
-  onChangingLanguageOption = event => {
-    console.log(event.target.value)
+  onChangingLanguageOption = optionValue => {
+    console.log(optionValue)
+    this.setState({selectedFilter: optionValue}, this.callForRepositories)
   }
 
   renderLoadingView = () => (
-    <div data-testid="loader">
+    <div data-testid="loader" className="loading-container">
       <Loader type="ThreeDots" color="#0284c7" height={80} width={80} />
     </div>
   )
@@ -119,20 +113,17 @@ class GithubPopularRepos extends Component {
     return (
       <div className="github-main-container">
         <h1 className="main-heading">Popular</h1>
-        <select
-          className="selection-container"
-          value={selectedFilter}
-          onChange={this.onChangingLanguageOption}
-        >
+        <div className="selection-container">
           {languageFiltersData.map(eachLang => (
             <LanguageFilterItem
               key={eachLang.id}
               optionDisplay={eachLang.language}
               optionValue={eachLang.id}
               isSelected={selectedFilter === eachLang.id}
+              onchangeFilter={this.onChangingLanguageOption}
             />
           ))}
-        </select>
+        </div>
         {repositoryView}
       </div>
     )

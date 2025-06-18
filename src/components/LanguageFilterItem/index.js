@@ -2,14 +2,18 @@
 import './index.css'
 
 const LanguageFilterItem = props => {
-  const {isSelected, optionDisplay, optionValue} = props
+  const {isSelected, optionDisplay, optionValue, onchangeFilter} = props
   const optionStyle = isSelected
     ? 'option-style selected-style'
     : 'option-style'
   return (
-    <option className={optionStyle} value={optionValue}>
+    <button
+      type="button"
+      className={optionStyle}
+      onClick={() => onchangeFilter(optionValue)}
+    >
       {optionDisplay}
-    </option>
+    </button>
   )
 }
 
